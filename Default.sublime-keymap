@@ -1,0 +1,9 @@
+[
+	{
+		"command": "groupie",
+		"context": [],
+		"keys": [
+			"ctrl+t", "ctrl+g"
+		]
+	}
+]
