@@ -29,21 +29,31 @@ class GroupieCommand(sublime_plugin.WindowCommand):
 		rules = self.settings.get("rules", [])
 		num_groups = win.num_groups()
 		cur_view = win.active_view()
+		temp_view = {}
 
 		for cur_group in range(num_groups):
 			if cur_group != default_group:
+				win.focus_group(cur_group)
+				temp_view[cur_group] = win.new_file()
 				for view in win.views_in_group(cur_group):
 					move_to_end(view, default_group)
 
 		for rule in rules:
 			dest_group = rule["index"]
 			patterns = rule["match"]
-			for view in win.views_in_group(default_group):
-				file_name = view.file_name()
-				if view.file_name():
-					for pattern in patterns:
-						if fnmatch(file_name, pattern):
-							move_to_end(view, dest_group)
+			if dest_group != default_group:
+				for view in win.views_in_group(default_group):
+					file_name = view.file_name()
+					if view.file_name():
+						for pattern in patterns:
+							if fnmatch(file_name, pattern):
+								move_to_end(view, dest_group)
+
+		for cur_group in range(num_groups):
+			if cur_group != default_group:
+				print("closing")
+				win.focus_view(temp_view[cur_group])
+				win.run_command("close_file")
 
 		if self.settings.get("sort", False):
 			for i in range(num_groups):
