@@ -60,10 +60,3 @@ class GroupieCommand(sublime_plugin.WindowCommand):
 				self.sort_group(i)
 
 		win.focus_view(cur_view)
-
-# ST3 features a plugin_loaded hook which is called when ST's API is ready.
-#
-# We must therefore call our init callback manually on ST2. It must be the last
-# thing in this plugin (thanks, beloved contributors!).
-if not int(sublime.version()) > 3000:
-	plugin_loaded()
